@@ -2,47 +2,31 @@ import sys
 import string
 
 alphabet = string.ascii_lowercase # a...z
+filename = sys.argv[0]
 
-
-def rot13(text):
-    "This prints a text after rot13 (lowercase)"
-    key = "nopqrstuvwxyzabcdefghijklm" # rot13
-    
+"This print a text after rot<num> only alphanumeric(lowercase)"
+def rot(text, num=13):
+    key = alphabet[num:] + alphabet[:num]
     text = text.lower()
-    print("[i] rot13: ", end = "")
-    for i in text:
-        position = str.find(alphabet, i)
-        if position != -1:
-            print(key[position], end = "")
-        else:
-            print(i, end = "")
+    print(text.translate(str.maketrans(alphabet, key)))
 
-def rot(text, key):
-    "This print a text after rot<KEY> (lowercase)"
-    alphabetKey = alphabet[key:]
-    alphabetKey += alphabet[:key]
-    text = text.lower()
-    print("[i] rot{}: ".format(key), end = "")
-    for i in text:
-        position = str.find(alphabet, i)
-        if position != -1:
-            print(alphabetKey[position], end = "")
-        else:
-            print(i, end = "")
+"Display help"
+def help():
+    print("[i] Usage: {} [text] [key]".format(filename))
+    print("    [text] - the text containing spaces must be enclosed in quotation marks")
+    print("    [key] - max/min 25/-25, default 13")
 
-if len(sys.argv) < 2:
-    print("[!] Too few arguments.")
-    print("[i] Usage: {} \"text to encrypt/decrypt\"".format(sys.argv[0]))
-elif len(sys.argv) == 3:
-    plaintext = sys.argv[1]
-    print("[input]: {}".format(plaintext))
-    rot(plaintext, int(sys.argv[2]))
+if 2 <= len(sys.argv) <=3:
+    text = sys.argv[1]
+    if len(sys.argv) == 2:
+        rot(text)
+    elif len(sys.argv) == 3:
+        try: # sys.argv[2] is a numeric?
+            if(-26 < int(sys.argv[2]) < 26):
+                rot(text, int(sys.argv[2]))
+            else:
+                print("[error] The second arg must be in range -25 to 25")
+        except ValueError: # if sys.argv[2] is not numeric then error
+            print("[error] The second arg is valid number.")
 else:
-    plaintext = sys.argv[1]
-    print("[input]: {}".format(plaintext))
-    rot13(plaintext)
-    
-
-
-    
-
+    help()
