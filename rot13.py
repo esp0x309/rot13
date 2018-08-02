@@ -1,3 +1,8 @@
+"""
+@author Sebastian Nawrot
+@email sebastian.nawrot@outlook.com
+"""
+
 import sys
 import string
 
